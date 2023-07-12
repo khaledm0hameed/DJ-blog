@@ -1,9 +1,9 @@
 from django.db import models
 from django.utils import timezone
+from taggit.managers import TaggableManager
+from django.contrib.auth.models import User
 
-def get_current_time():
-    current_time = timezone.now()
-    return current_time
+
 
 # Create your models here.
 
@@ -13,3 +13,11 @@ class Post(models.Model):
     date_post=models.DateField(default=timezone.now)
     image=models.ImageField()
     draft=models.BooleanField(default=True)
+    tag = TaggableManager()
+    author=models.ForeignKey(User,on_delete=models.SET_NULL,null=True,blank=True)
+
+
+
+    def __str__(self):
+        
+        return self.title
