@@ -22,5 +22,8 @@ from blog import views
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('blog/',views.Post_list),
-    path('blog/<int:id>',views.post_detail)
+    path('blog/<int:id>',views.post_detail),
+    path('blog/new',views.addpost),
+    path('blog/<int:id>/edit',views.editpost),
+    path('blog/<int:id>/delet',views.deletepost),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
