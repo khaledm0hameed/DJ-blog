@@ -1,51 +1,44 @@
 from django.shortcuts import render,redirect
 from .models import Post
 from .forms import PostForms
+from django.views.generic import ListView,DetailView,DeleteView,CreateView,UpdateView
 # Create your views here.
 
-def Post_list(requset):
+
+class Post_list(ListView):
+  model = Post
+  template_name = 'index.html'
+  context_object_name = 'post'
+
+
+
+class Post_detail(DetailView):
+
+  model = Post
+  template_name = 'postdetail.html'
+  context_object_name = 'post'
+
+
+
+class Post_create(CreateView):
+  model = Post
+  template_name = 'addpost.html'
+  fields = ['title','cotent','date_post','image','draft','tag','author']
+  success_url = '/'
   
-  post=Post.objects.all()
-  return render(requset,'index.html',{'post':post})
 
 
 
-def post_detail(request,id):
-  post = Post.objects.get(id=id)
-
-  return render(request,'postdetail.html',{'post':post})
-
-
-
-def addpost(request):
-  if request.method == "POST":
-    form = PostForms(request.POST,request.FILES)
-    if form.is_valid():
-      myform=form.save(commit=False)
-      myform.author = request.user
-      myform.save()
-      return redirect('/')
-  else:
-    form = PostForms()
-  return render(request,'addpost.html',{'form':form})
+class Post_edit(UpdateView):
+  model = Post
+  template_name = 'editpost.html'
+  fields = ['title','cotent','date_post','image','draft','tag','author']
+  success_url = '/'
 
 
 
 
-def editpost(request,id):
-  post = Post.objects.get(id=id)
-  if request.method == "POST":
-    form = PostForms(request.POST,request.FILES,instance=post)
-    if form.is_valid():
-      myform=form.save(commit=False)
-      myform.author = request.user
-      myform.save()
-      return redirect('/')
-  else:
-    form = PostForms(instance=post)
-  return render(request,'editpost.html',{'form':form})
+class Post_delet(DeleteView):
+  model = Post
+  success_url = '/'
 
-def deletepost(request,id):
-  post=Post.objects.get(id=id)
-  post.delete()
-  return redirect('/')
